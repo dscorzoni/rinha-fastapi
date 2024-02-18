@@ -1,20 +1,26 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 # Database Configuration
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres@db/postgres"  # For Docker
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres@db/postgres"
 # For Local Development
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres@localhost/postgres"
-db_engine = create_engine(SQLALCHEMY_DATABASE_URL,
-                          pool_size=20, max_overflow=0)
-db_session = scoped_session(
-    sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=db_engine
-    )
+# SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres@localhost/postgres"
+
+db_engine = create_async_engine(
+    SQLALCHEMY_DATABASE_URL,
+    pool_size=30,
+    max_overflow=0,
+    isolation_level="READ COMMITTED"
 )
+
+db_session = async_sessionmaker(
+    bind=db_engine,
+    autoflush=False,
+    future=True
+)
+
 Model = declarative_base()
 
 

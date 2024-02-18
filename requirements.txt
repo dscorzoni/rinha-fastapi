@@ -4,3 +4,4 @@ typing
 uvicorn
 sqlalchemy
 psycopg2-binary
+asyncpg
