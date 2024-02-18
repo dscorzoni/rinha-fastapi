@@ -9,7 +9,7 @@ app.include_router(router)
 
 
 def add_customer_data():
-    SQLALCHEMY_DATABASE_URL = "postgresql://postgres@localhost/postgres"
+    SQLALCHEMY_DATABASE_URL = "postgresql://postgres@db/postgres"
 
     db_engine = create_engine(
         SQLALCHEMY_DATABASE_URL,

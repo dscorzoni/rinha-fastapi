@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/clientes/{id}/transacoes")
 async def post_transacoes(id: int, request: TransactionSchema):
     async with db_session.begin() as session:
-        customer = await session.get(CustomerModel, id)
+        customer = await session.get(CustomerModel, id, with_for_update=True)
         if not customer:
             raise HTTPException(
                 status_code=400,
@@ -47,7 +47,7 @@ async def get_extratos(id: int):
         customer = await session.get(CustomerModel, id)
         if not customer:
             raise HTTPException(
-                status_code=400,
+                status_code=404,
                 detail='Cliente não encontrado'
             )
         last_transactions = await session.execute(
